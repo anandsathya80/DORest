@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('foods', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('food_type_id');
             $table->foreign('food_type_id')->references('id')->on('food_type')->onDelete('cascade');
             $table->string('name');
             $table->string('url_pisture')->nullable();

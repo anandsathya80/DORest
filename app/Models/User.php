@@ -21,7 +21,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_type_id'
     ];
+
+    public function userType()
+    {
+        return $this->belongsTo(userType::class, 'user_type_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

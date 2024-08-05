@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('order_summary', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('payment_method_id');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
             $table->bigInteger('price_total');
-            $table->datetimes('print_time');
+            $table->datetime('print_time');
             $table->timestamps();
         });
     }

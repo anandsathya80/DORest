@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('order_detail', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->unsignedBigInteger('food_id');
             $table->foreign('food_id')->references('id')->on('foods')->onDelete('cascade');
             $table->integer('food_qty');
             $table->timestamps();
