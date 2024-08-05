@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
             $table->bigInteger('price_total');
             $table->datetimes('print_time');
             $table->timestamps();
