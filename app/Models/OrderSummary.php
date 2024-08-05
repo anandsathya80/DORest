@@ -8,4 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class OrderSummary extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'order_id',
+        'user_id',
+        'payment_method_id',
+        'price_total',
+        'print_time',
+    ];
+
+    public function order()
+    {
+        return $this->belongsTo(Orders::class, 'order_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethods::class, 'payment_method_id');
+    }
 }

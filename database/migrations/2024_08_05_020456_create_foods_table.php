@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreign('food_type_id')->references('id')->on('food_type')->onDelete('cascade');
             $table->string('name');
+            $table->string('url_pisture')->nullable();
             $table->string('availability');
             $table->bigInteger('price');
             $table->timestamps();
