@@ -15,7 +15,7 @@ class FoodTypeController extends Controller
     {
         $foodType = FoodType::all();
         $formattedFoodtype = $foodType->map(function ($foodType) {
-            return $this->formatCustomer($foodType);
+            return $this->formatFoodType($foodType);
         });
 
         return response()->json(['foodType' => $formattedFoodtype,]);
@@ -71,5 +71,15 @@ class FoodTypeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function formatFoodType(FoodType $foodType)
+    {
+        return [
+            'id' => $foodType->id,
+            'food_type_name' => $foodType->food_type_name,
+            'created_at' => $foodType->created_at,
+            'updated_at' => $foodType->updated_at
+        ];
     }
 }
