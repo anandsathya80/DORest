@@ -7,6 +7,7 @@ use App\Http\Controllers\food\FoodController;
 use App\Http\Controllers\food\FoodTypeController;
 use App\Http\Controllers\order\OrderController;
 use App\Http\Controllers\order\OrderDetailController;
+use App\Http\Controllers\order\OrderSummaryController;
 use App\Http\Controllers\payment\PaymentController;
 
 /*
@@ -40,7 +41,9 @@ Route::post('/foods', [FoodController::class, 'store']);
 // order
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
-Route::get('/summaryOrders/{id}', [OrderController::class, 'show']);
+
+// summary order
+Route::get('/summaryOrders/{id}', [OrderSummaryController::class, 'show']);
 
 
 // order detail

@@ -6,22 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Foods;
 use App\Models\OrderDetail;
 use App\Models\Orders;
+use App\Models\OrderSummary;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class OrderSummaryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $order = Orders::all();
-        $formattedorder = $order->map(function ($order) {
-            return $this->formatOrder($order);
-        });
-
-        return response()->json(['order' => $formattedorder,]);
+        $orderSummary = OrderSummary::all();
+        return response()->json($orderSummary);
     }
 
     /**
@@ -37,12 +34,14 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $order = Orders::create([
+        $orderSummary = OrderSummary::create([
+            'order_id' => $request->input('order_id'),
             'user_id' => $request->input('user_id'),
-            'customer_name' => $request->input('customer_name'),
+            'payment_method_id' => $request->input('payment_method_id'),
+            'price_total' => $request->input('price_total'),
         ]);
 
-        return response()->json([$order, 'created successfully']);
+        return response()->json($orderSummary);
     }
 
     /**
@@ -50,6 +49,19 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
+        $order = Orders::find($id);
+        $detailOrder = OrderDetail::where('order_id', $id)
+            ->latest()
+            ->paginate(10);
+        $formattedDetailOrder = $detailOrder->map(function ($id) {
+            return $this->formatOrderDetail($id);
+        });
+
+
+        return response()->json([
+            'order' => $order,
+            'detail_order' => $formattedDetailOrder,
+        ]);
     }
 
     /**
@@ -87,6 +99,21 @@ class OrderController extends Controller
             'order_time' => $orders->order_time,
             'created_at' => $orders->created_at,
             'updated_at' => $orders->updated_at
+        ];
+    }
+
+    private function formatOrderDetail(OrderDetail $orderDetail)
+    {
+        $food = Foods::find($orderDetail->food_id);
+        return [
+            'id' => $orderDetail->id,
+            'order_id' => $orderDetail->order_id,
+            'food_id' => $orderDetail->food_id,
+            'food_qty' => $orderDetail->food_qty,
+            'food_name' => $food ? $food->name : null,
+            'price' => $orderDetail->food_qty * $food->price,
+            'created_at' => $orderDetail->created_at,
+            'updated_at' => $orderDetail->updated_at
         ];
     }
 }
