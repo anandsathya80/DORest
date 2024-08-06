@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\order;
 
 use App\Http\Controllers\Controller;
+use App\Models\Foods;
 use App\Models\OrderDetail;
 use App\Models\Orders;
 use App\Models\User;
@@ -49,12 +50,19 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        $detailOrder = OrderDetail::find($id);
-        $formattedDetailOrder = $detailOrder->map(function ($detailOrder) {
-            return $this->formatCustomer($detailOrder);
+        $order = Orders::find($id);
+        $detailOrder = OrderDetail::where('order_id', $id)
+            ->latest()
+            ->paginate(10);
+        $formattedDetailOrder = $detailOrder->map(function ($id) {
+            return $this->formatOrderDetail($id);
         });
 
-        return response()->json(['detailOrder' => $formattedDetailOrder,]);
+
+        return response()->json([
+            'order' => $order,
+            'detail_order' => $formattedDetailOrder,
+        ]);
     }
 
     /**
@@ -92,6 +100,21 @@ class OrderController extends Controller
             'order_time' => $orders->order_time,
             'created_at' => $orders->created_at,
             'updated_at' => $orders->updated_at
+        ];
+    }
+
+    private function formatOrderDetail(OrderDetail $orderDetail)
+    {
+        $food = Foods::find($orderDetail->food_id);
+        return [
+            'id' => $orderDetail->id,
+            'order_id' => $orderDetail->order_id,
+            'food_id' => $orderDetail->food_id,
+            'food_qty' => $orderDetail->food_qty,
+            'food_name' => $food ? $food->name : null,
+            'price' => $orderDetail->food_qty * $food->price,
+            'created_at' => $orderDetail->created_at,
+            'updated_at' => $orderDetail->updated_at
         ];
     }
 }

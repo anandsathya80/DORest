@@ -34,6 +34,8 @@ Route::post('/foods', [FoodController::class, 'store']);
 // order
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
+Route::get('/summaryOrders/{id}', [OrderController::class, 'show']);
+
 
 // order detail
 Route::get('/orderDetail', [OrderDetailController::class, 'index']);
