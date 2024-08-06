@@ -39,14 +39,8 @@ class OrderController extends Controller
             'user_id' => $request->input('user_id'),
             'customer_name' => $request->input('customer_name'),
         ]);
-        // $detailOrder = OrderDetail::create([
-        //     'order_id' => $order->id,
-        //     'food_id' => $request->input('food_id'),
-        //     'food_qty' => $request->input('food_qty'),
-        // ]);
 
         return response()->json([$order, 'created successfully']);
-        // return response()->json([$detailOrder, 'detail created successfully']);
     }
 
     /**
