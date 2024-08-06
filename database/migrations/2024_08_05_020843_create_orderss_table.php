@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('customer_name');
-            $table->enum('status_order',['On Process','Complete'])->change();
+            $table->enum('status_order', ['On Process', 'Complete'])->change();
             $table->dateTime('order_time');
             $table->timestamps();
         });
