@@ -5,6 +5,7 @@ namespace App\Http\Controllers\order;
 use App\Http\Controllers\Controller;
 use App\Models\OrderDetail;
 use App\Models\Orders;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -82,9 +83,11 @@ class OrderController extends Controller
 
     private function formatOrder(Orders $orders)
     {
+        $server = User::find($orders->user_id);
         return [
             'id' => $orders->id,
             'user_id' => $orders->user_id,
+            'server_name' => $server ? $server->name : null,
             'customer_name' => $orders->customer_name,
             'order_time' => $orders->order_time,
             'created_at' => $orders->created_at,
