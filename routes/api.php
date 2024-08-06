@@ -6,6 +6,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\food\FoodController;
 use App\Http\Controllers\food\FoodTypeController;
 use App\Http\Controllers\order\OrderController;
+use App\Http\Controllers\order\OrderDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,10 @@ Route::post('/foods', [FoodController::class, 'store']);
 // order
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
+
+// order detail
+Route::get('/orderDetail', [OrderDetailController::class, 'index']);
+Route::post('/orderDetail', [OrderDetailController::class, 'store']);
 
 Route::get('/', function () {
     return view('welcome');
