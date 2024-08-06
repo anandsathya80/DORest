@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('order_summary', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedBigInteger('order_id');
             $table->foreignUuid('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id');
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('payment_method_id');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');

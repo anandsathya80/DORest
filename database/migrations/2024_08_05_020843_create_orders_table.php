@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedBigInteger('user_id');
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('customer_name');
             $table->enum('status_order', ['On Process', 'Complete'])->change();
