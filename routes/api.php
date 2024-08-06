@@ -7,6 +7,7 @@ use App\Http\Controllers\food\FoodController;
 use App\Http\Controllers\food\FoodTypeController;
 use App\Http\Controllers\order\OrderController;
 use App\Http\Controllers\order\OrderDetailController;
+use App\Http\Controllers\payment\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,11 @@ Route::post('/login', [AuthController::class, 'login']);
 // food type
 Route::get('/foodType', [FoodTypeController::class, 'index']);
 Route::post('/foodType', [FoodTypeController::class, 'store']);
+
+
+// paymnet type
+Route::get('/payment', [PaymentController::class, 'index']);
+Route::post('/payment', [PaymentController::class, 'store']);
 
 // foods
 Route::get('/foods', [FoodController::class, 'index']);
