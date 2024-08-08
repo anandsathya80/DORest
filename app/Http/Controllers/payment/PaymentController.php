@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderSummary;
 use App\Models\PaymentMethods;
 use Illuminate\Http\Request;
 
@@ -41,9 +42,17 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
+    public function show(
+        string $id,
+        string $startDate,
+        string $endDate,
+    ) {
+        $totalPayment = OrderSummary::where('payment_method_id', $id)
+            ->whereDate('print_time', '>=', $startDate)
+            ->whereDate('print_time', '<=', $endDate);
+        $sumPayment = $totalPayment->sum('price_total');
+
+        return response()->json($sumPayment);
     }
 
     /**

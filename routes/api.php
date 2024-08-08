@@ -46,6 +46,9 @@ Route::post('/orders', [OrderController::class, 'store']);
 Route::get('/summaryOrders/{id}', [OrderSummaryController::class, 'show']);
 Route::post('/summaryOrders', [OrderSummaryController::class, 'store']);
 
+// POS by method_payment
+Route::get('/sumMethodPayment/{id}/{startDate}/{endDate}', [PaymentController::class, 'show']);
+
 
 // order detail
 Route::get('/orderDetail', [OrderDetailController::class, 'index']);
