@@ -49,10 +49,19 @@ class PaymentController extends Controller
     ) {
         $totalPayment = OrderSummary::where('payment_method_id', $id)
             ->whereDate('print_time', '>=', $startDate)
-            ->whereDate('print_time', '<=', $endDate);
+            ->whereDate('print_time', '<=', $endDate)->get();
         $sumPayment = $totalPayment->sum('price_total');
+        $totalOrder = $totalPayment->count('order_id');
 
-        return response()->json($sumPayment);
+        return response()->json(
+            [
+                'order' => $totalPayment,
+                'total_paymnet'  => $sumPayment,
+                'total_order' => $totalOrder,
+                'from_date' => $startDate,
+                'to_date' => $endDate,
+            ]
+        );
     }
 
     /**
