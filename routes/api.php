@@ -44,6 +44,7 @@ Route::post('/orders', [OrderController::class, 'store']);
 
 // summary order
 Route::get('/summaryOrders/{id}', [OrderSummaryController::class, 'show']);
+Route::post('/summaryOrders', [OrderSummaryController::class, 'store']);
 
 
 // order detail
