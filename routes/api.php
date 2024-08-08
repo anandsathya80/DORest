@@ -9,6 +9,7 @@ use App\Http\Controllers\order\OrderController;
 use App\Http\Controllers\order\OrderDetailController;
 use App\Http\Controllers\order\OrderSummaryController;
 use App\Http\Controllers\payment\PaymentController;
+use App\Http\Controllers\sale\SaleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,10 @@ Route::post('/summaryOrders', [OrderSummaryController::class, 'store']);
 
 // POS by method_payment
 Route::get('/sumMethodPayment/{id}/{startDate}/{endDate}', [PaymentController::class, 'show']);
+
+// POS by food
+Route::get('/sumFood/{startDate}/{endDate}', [SaleController::class, 'countFood']);
+
 
 
 // order detail
