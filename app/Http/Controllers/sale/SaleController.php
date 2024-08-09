@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
+    // start count by food
     public function countFood(
         string $startDate,
         string $endDate,
@@ -49,7 +50,9 @@ class SaleController extends Controller
             'total_sales_per_food' => $orderDetail->food_qty * $food->price,
         ];
     }
+    // end count by food
 
+    // start count by server
     public function countSalesByServer(
         string $id,
         string $startDate,
@@ -77,4 +80,38 @@ class SaleController extends Controller
             'price_total' => $orderSummary->price_total,
         ];
     }
+    // end count by server
+
+    // start count by date
+    public function countByDate(
+        string $startDate,
+        string $endDate,
+    ) {
+        $totalSalesByDate = OrderSummary::whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            ->get();
+        $countTotalOrder = count($totalSalesByDate);
+        $sumTotalOrderPrice = $totalSalesByDate->sum('price_total');
+        $formatCountByDateInterval = $totalSalesByDate->map(function ($totalSalesByDate) {
+            return $this->formatCountByDateInterval($totalSalesByDate);
+        });
+
+        return response()->json([
+            'sales_by_date_interval' => $formatCountByDateInterval,
+            'total_sales' => $countTotalOrder,
+            'total_sales_price' => $sumTotalOrderPrice,
+            'from_date' => $startDate,
+            'to_date' => $endDate,
+        ]);
+    }
+    private function formatCountByDateInterval(OrderSummary $orderSummary)
+    {
+        $order = Orders::find($orderSummary->order_id);
+        return [
+            'order_id' => $orderSummary->order_id,
+            'order_time' => $order ? $order->order_time : null,
+            'price_total' => $orderSummary->price_total,
+        ];
+    }
+    // end count by date
 }
