@@ -62,12 +62,16 @@ class SaleController extends Controller
             ->whereDate('created_at', '>=', $startDate)
             ->whereDate('created_at', '<=', $endDate)
             ->get();
+        $countTotalOrder = count($totalSalesByServer);
         $formattedTotalByServer = $totalSalesByServer->map(function ($totalSalesByServer) {
             return $this->formatCountByServer($totalSalesByServer);
         });
 
         return response()->json([
             'total_sales_by_server' => $formattedTotalByServer,
+            'total_sales' => $countTotalOrder,
+            'from_date' => $startDate,
+            'to_date' => $endDate,
         ]);
     }
 
@@ -107,9 +111,11 @@ class SaleController extends Controller
     private function formatCountByDateInterval(OrderSummary $orderSummary)
     {
         $order = Orders::find($orderSummary->order_id);
+        $server = User::find($orderSummary->user_id);
         return [
             'order_id' => $orderSummary->order_id,
             'order_time' => $order ? $order->order_time : null,
+            'server_name' => $server ? $server->name : null,
             'price_total' => $orderSummary->price_total,
         ];
     }
