@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Foods;
 use App\Models\FoodType;
 use App\Models\OrderDetail;
+use App\Models\Orders;
+use App\Models\OrderSummary;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,6 +47,34 @@ class SaleController extends Controller
             'qty' => $orderDetail->food_qty,
             'food_id' => $orderDetail->food_id,
             'total_sales_per_food' => $orderDetail->food_qty * $food->price,
+        ];
+    }
+
+    public function countSalesByServer(
+        string $id,
+        string $startDate,
+        string $endDate,
+    ) {
+        $totalSalesByServer = OrderSummary::where('user_id', $id)
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            ->get();
+        $formattedTotalByServer = $totalSalesByServer->map(function ($totalSalesByServer) {
+            return $this->formatCountByServer($totalSalesByServer);
+        });
+
+        return response()->json([
+            'total_sales_by_server' => $formattedTotalByServer,
+        ]);
+    }
+
+    private function formatCountByServer(OrderSummary $orderSummary)
+    {
+        $order = Orders::find($orderSummary->order_id);
+        return [
+            'order_id' => $orderSummary->order_id,
+            'order_time' => $order ? $order->order_time : null,
+            'price_total' => $orderSummary->price_total,
         ];
     }
 }

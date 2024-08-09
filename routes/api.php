@@ -53,7 +53,8 @@ Route::get('/sumMethodPayment/{id}/{startDate}/{endDate}', [PaymentController::c
 // POS by food
 Route::get('/sumFood/{startDate}/{endDate}', [SaleController::class, 'countFood']);
 
-
+// POS by server
+Route::get('/sumServer/{id}/{startDate}/{endDate}', [SaleController::class, 'countSalesByServer']);
 
 // order detail
 Route::get('/orderDetail', [OrderDetailController::class, 'index']);
