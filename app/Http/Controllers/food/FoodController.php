@@ -6,14 +6,30 @@ use App\Http\Controllers\Controller;
 use App\Models\Foods;
 use App\Models\FoodType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 class FoodController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    private function respondUnauthorized()
+    {
+        return response()->json(['error' => 'Unauthenticated, kindly try again after authentication'], Response::HTTP_UNAUTHORIZED);
+    }
+
+    private function checkToken()
+    {
+        return Auth::check();
+    }
+
     public function index()
     {
+        if (!$this->checkToken()) {
+            return $this->respondUnauthorized();
+        }
+
         $food = Foods::all();
         $formattedFood = $food->map(function ($food) {
             return $this->formatFood($food);
