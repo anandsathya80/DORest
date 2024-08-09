@@ -35,10 +35,16 @@ class FoodController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->hasFile('url_picture')) {
+            $file = $request->file('url_picture');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads/foods', $fileName, 'public');
+        }
+
         $food = Foods::create([
             'food_type_id' => $request->input('food_type_id'),
             'name' => $request->input('name'),
-            'url_picture' => $request->input('url_picture'),
+            'url_picture' => $filePath,
             'availability' => $request->input('availability'),
             'price' => $request->input('price'),
         ]);
