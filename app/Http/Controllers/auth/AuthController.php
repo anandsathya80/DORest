@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -29,9 +30,9 @@ class AuthController extends Controller
             ['password' => bcrypt($request->password)]
         ));
 
-        // $token = JWTAuth::fromUser($user);
+        $token = JWTAuth::fromUser($user);
 
-        return response()->json(['user' => $user], 201);
+        return response()->json(['user' => $user, 'token' => $token], 201);
     }
 
     public function login(Request $request)
@@ -50,8 +51,36 @@ class AuthController extends Controller
         }
 
         $user = $request->user();
+        $token = JWTAuth::fromUser($user);
 
-        return response()->json(['user' => $user]);
+        return response()->json(['user' => $user, 'token' => $token]);
+    }
+
+    public function logout(Request $request)
+    {
+        try {
+            // Invalidate (add to blacklist) the current token
+            JWTAuth::invalidate(JWTAuth::getToken());
+
+            // Retrieve the authenticated user
+            $user = Auth::user();
+
+            return response(['user' => $user, 'message' => 'Successfully logged out']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Logout failed', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function refreshToken(Request $request)
+    {
+        try {
+            // Generate and return a new token
+            $token = JWTAuth::refresh(JWTAuth::getToken());
+
+            return response(['token' => $token]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Refresh failed', 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function user(Request $request)
