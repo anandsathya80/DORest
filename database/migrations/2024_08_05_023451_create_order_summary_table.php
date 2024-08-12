@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_summary', function (Blueprint $table) {
+        Schema::create('order_summaries', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
