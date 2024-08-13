@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('user_type_id');
-            $table->foreign('user_type_id')->references('id')->on('user_type')->onDelete('cascade');
+            $table->foreign('user_type_id')->references('id')->on('user_types')->onDelete('cascade');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

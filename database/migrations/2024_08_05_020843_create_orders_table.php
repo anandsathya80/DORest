@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('customer_name');
-            $table->enum('status_order', ['On Process', 'Complete'])->change();
+            $table->string('status_order');
             $table->dateTime('order_time');
             $table->timestamps();
         });
