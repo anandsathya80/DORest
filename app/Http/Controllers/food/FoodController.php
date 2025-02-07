@@ -8,6 +8,7 @@ use App\Models\FoodType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
+use PHPUnit\Framework\Constraint\Count;
 
 class FoodController extends Controller
 {
@@ -34,8 +35,17 @@ class FoodController extends Controller
         $formattedFood = $food->map(function ($food) {
             return $this->formatFood($food);
         });
+        $totalFood = Foods::count();
+        $totalDessert = Foods::count();
+        $totalBeverage = Foods::count();
 
-        return response()->json($formattedFood,);
+        return response()
+            ->json([
+                'totalFood' => $totalFood,
+                'totalBeverage' => $totalBeverage,
+                'totalDessert' => $totalDessert,
+                'F&B' => $formattedFood,
+            ]);
     }
 
     /**
